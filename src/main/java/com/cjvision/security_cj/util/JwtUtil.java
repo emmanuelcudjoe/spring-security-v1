@@ -38,7 +38,7 @@ public class JwtUtil {
         return parseClaims(token).getSubject();
     }
 
-    private Claims parseClaims(String token) {
+    public Claims parseClaims(String token) {
         return Jwts.parser()
                 .setSigningKey(secret_key)
                 .parseClaimsJws(token)
@@ -47,8 +47,9 @@ public class JwtUtil {
 
     public String generateAccessToken(User user){
         return Jwts.builder()
-                .setSubject(user.getId() + ", " + user.getEmail())
+                .setSubject(user.getId() + ", " + user.getUsername())
                 .setIssuer("cj-visions")
+                .claim("roles", user.getRoles().toString())
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(TOKEN_DURATION + System.currentTimeMillis()))
                 .signWith(SignatureAlgorithm.HS256, secret_key)

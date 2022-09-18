@@ -3,6 +3,7 @@ package com.cjvision.security_cj.controller;
 import com.cjvision.security_cj.Entity.AuthRequest;
 import com.cjvision.security_cj.Entity.AuthResponse;
 import com.cjvision.security_cj.Entity.User;
+import com.cjvision.security_cj.repository.RoleRepository;
 import com.cjvision.security_cj.repository.UserRepository;
 import com.cjvision.security_cj.util.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,15 +35,27 @@ public class AuthApi {
     @Autowired
     UserRepository userRepository;
 
+    @Autowired
+    RoleRepository roleRepository;
+
     @PostMapping("/register")
     public Object register(@RequestBody AuthRequest authRequest){
 
         String password = passwordEncoder.encode(authRequest.getPassword());
 
+        var role = roleRepository.findByName("ROLE_USER");
         User user = new User();
+
+        if (role.isPresent()){
+            user.addRole(role.get());
+        } else {
+            System.out.println("No role present");
+        }
+
         user.setEmail(authRequest.getEmail());
         user.setPassword(password);
-        return userRepository.save(user);
+        var savedUser =  userRepository.save(user);
+        return savedUser;
     }
 
     @PostMapping("/auth/login")
