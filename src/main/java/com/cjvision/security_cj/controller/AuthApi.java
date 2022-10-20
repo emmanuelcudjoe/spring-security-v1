@@ -7,6 +7,7 @@ import com.cjvision.security_cj.repository.RoleRepository;
 import com.cjvision.security_cj.repository.UserRepository;
 import com.cjvision.security_cj.util.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
